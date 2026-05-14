@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
@@ -37,9 +38,9 @@ export default function Sidebar() {
   const waActive = pathname.startsWith('/dashboard/whatsapp')
 
   return (
-    <aside className="flex w-60 flex-col border-r border-gray-200 bg-white">
-      <div className="px-4 py-5">
-        <h1 className="text-lg font-semibold text-gray-900">CommAgent</h1>
+    <aside className="flex w-60 flex-col border-r border-gray-200 bg-brand-cream">
+      <div className="py-5">
+        <Image src="/logo.png" alt="CommAgent" width={240} height={240} className="w-full" />
       </div>
       <nav className="flex flex-1 flex-col gap-1 px-2">
         {links.map((link) => {
@@ -60,7 +61,7 @@ export default function Sidebar() {
               href={link.href}
               className={`rounded-md px-3 py-2 text-sm font-medium ${
                 active
-                  ? 'bg-gray-100 text-gray-900'
+                  ? 'bg-brand-cream text-gray-900'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >
@@ -74,7 +75,7 @@ export default function Sidebar() {
           href="/dashboard/whatsapp"
           className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
             waActive
-              ? 'bg-gray-100 text-gray-900'
+              ? 'bg-brand-cream text-gray-900'
               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
           }`}
         >

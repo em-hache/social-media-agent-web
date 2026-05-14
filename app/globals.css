@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-cream: #fcf2e6;
+  --color-brand-red: #bf342a;
+}
+
 button:not(:disabled) {
   cursor: pointer;
 }

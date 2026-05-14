@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
-const NODE_API = process.env.NODE_API_URL!
+const NODE_API = process.env.WHATSAPP_GW_URL!
 
 export async function GET() {
   const session = await getServerSession(authOptions)

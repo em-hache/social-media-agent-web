@@ -94,7 +94,7 @@ export default function CraftMessagePage() {
                       setUserDropdownOpen(true)
                     }}
                     onFocus={() => setUserDropdownOpen(true)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
                   />
                   {userDropdownOpen && filteredUsers.length > 0 && (
                     <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
@@ -135,7 +135,7 @@ export default function CraftMessagePage() {
                   onChange={(e) => setBulletPoints(e.target.value)}
                   rows={5}
                   placeholder="Escribe los puntos clave aquí..."
-                  className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
                 />
               </div>
 
@@ -148,7 +148,7 @@ export default function CraftMessagePage() {
                   value={orgContext}
                   onChange={(e) => setOrgContext(e.target.value)}
                   placeholder="ej. colegio, empresa, grupo comunitario..."
-                  className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function CraftMessagePage() {
                 onClick={handleSubmit}
                 disabled={sending || !selectedUserId || !bulletPoints.trim()}
                 title="Generar mensaje a partir de los puntos clave"
-                className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                className="rounded-md bg-brand-red px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-red/90 disabled:opacity-50"
               >
                 {sending ? 'Redactando...' : 'Redactar mensaje'}
               </button>

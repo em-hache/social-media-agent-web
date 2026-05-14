@@ -112,7 +112,7 @@ export default function RecipientsPage() {
             placeholder="Filtrar por nombre, teléfono o correo..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-64 rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-64 rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
           />
         </div>
         {loading && <p className="text-sm text-gray-500">Cargando...</p>}
@@ -228,7 +228,7 @@ export default function RecipientsPage() {
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
                   />
                 </div>
                 <div>
@@ -237,7 +237,7 @@ export default function RecipientsPage() {
                     type="email"
                     value={editEmail}
                     onChange={(e) => setEditEmail(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
                   />
                 </div>
               </div>
@@ -253,7 +253,7 @@ export default function RecipientsPage() {
                   onClick={handleEditSave}
                   disabled={editSaving}
                   title="Guardar cambios"
-                  className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="rounded-md bg-brand-red px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-red/90 disabled:opacity-50"
                 >
                   {editSaving ? 'Guardando...' : 'Guardar'}
                 </button>

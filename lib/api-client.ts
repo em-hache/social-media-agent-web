@@ -1,7 +1,7 @@
 import type { User, Recipient, DistributionList, DistributionListSummary, CraftMessageRequest, CraftMessageResponse, OutboxEntry, OutboxStatus } from './types'
 
-const NODE_API = process.env.NODE_API_URL!
-const FASTAPI  = process.env.FASTAPI_URL!
+const WH_GW = process.env.WHATSAPP_GW_URL!
+const MAIN_SERVICE  = process.env.MAIN_SERVICE_URL!
 
 async function request<T>(
   base: string,
@@ -25,84 +25,84 @@ async function request<T>(
 
 export const whatsappApi = {
   getStatus: () =>
-    request<{ connected: boolean; phone?: string }>(NODE_API, '/status'),
+    request<{ connected: boolean; phone?: string }>(WH_GW, '/status'),
   getQR: () =>
-    request<{ qr: string }>(NODE_API, '/qr'),
+    request<{ qr: string }>(WH_GW, '/qr'),
 }
 
 export const usersApi = {
   getAll: () =>
-    request<User[]>(FASTAPI, '/users/all'),
+    request<User[]>(MAIN_SERVICE, '/users/all'),
   create: (body: Omit<User, 'id' | 'created_at'>) =>
-    request<User>(FASTAPI, '/users/create', {
+    request<User>(MAIN_SERVICE, '/users/create', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
   createFromRecipient: (body: { recipient_id: string; alias: string; email: string; roles?: string[] }) =>
-    request<User>(FASTAPI, '/users/from-recipient', {
+    request<User>(MAIN_SERVICE, '/users/from-recipient', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
   update: (id: string, body: Partial<User>) =>
-    request<User>(FASTAPI, `/users/${id}`, {
+    request<User>(MAIN_SERVICE, `/users/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(body),
     }),
   delete: (id: string) =>
-    request<void>(FASTAPI, `/users/${id}`, { method: 'DELETE' }),
+    request<void>(MAIN_SERVICE, `/users/${id}`, { method: 'DELETE' }),
   deactivate: (id: string) =>
-    request<User>(FASTAPI, `/users/${id}/deactivate`, { method: 'PUT' }),
+    request<User>(MAIN_SERVICE, `/users/${id}/deactivate`, { method: 'PUT' }),
   activate: (id: string) =>
-    request<User>(FASTAPI, `/users/${id}/activate`, { method: 'PUT' }),
+    request<User>(MAIN_SERVICE, `/users/${id}/activate`, { method: 'PUT' }),
 }
 
 export const recipientsApi = {
   getAll: () =>
-    request<Recipient[]>(FASTAPI, '/api/recipients/all'),
+    request<Recipient[]>(MAIN_SERVICE, '/api/recipients/all'),
   search: (name: string) =>
-    request<Recipient[]>(FASTAPI, `/api/recipients/search/?name=${encodeURIComponent(name)}`),
+    request<Recipient[]>(MAIN_SERVICE, `/api/recipients/search/?name=${encodeURIComponent(name)}`),
   getOne: (id: string) =>
-    request<Recipient>(FASTAPI, `/api/recipients/${id}`),
+    request<Recipient>(MAIN_SERVICE, `/api/recipients/${id}`),
   create: (body: { name: string; phone: string; email: string }) =>
-    request<Recipient>(FASTAPI, '/api/recipients/', {
+    request<Recipient>(MAIN_SERVICE, '/api/recipients/', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
   update: (id: string, body: { name: string; phone: string; email: string }) =>
-    request<Recipient>(FASTAPI, `/api/recipients/${id}`, {
+    request<Recipient>(MAIN_SERVICE, `/api/recipients/${id}`, {
       method: 'PUT',
       body: JSON.stringify(body),
     }),
   deactivate: (id: string) =>
-    request<Recipient>(FASTAPI, `/api/recipients/${id}/deactivate`, {
+    request<Recipient>(MAIN_SERVICE, `/api/recipients/${id}/deactivate`, {
       method: 'PUT',
     }),
   activate: (id: string) =>
-    request<Recipient>(FASTAPI, `/api/recipients/${id}/activate`, {
+    request<Recipient>(MAIN_SERVICE, `/api/recipients/${id}/activate`, {
       method: 'PUT',
     }),
   delete: (id: string) =>
-    request<void>(FASTAPI, `/api/recipients/${id}`, { method: 'DELETE' }),
+    request<void>(MAIN_SERVICE, `/api/recipients/${id}`, { method: 'DELETE' }),
 }
 
 export const listsApi = {
   getAll: () =>
-    request<DistributionListSummary[]>(FASTAPI, '/api/distribution-lists/'),
+    request<DistributionListSummary[]>(MAIN_SERVICE, '/api/distribution-lists/'),
   getByName: (name: string) =>
-    request<DistributionList>(FASTAPI, `/api/distribution-lists/${encodeURIComponent(name)}`),
+    request<DistributionList>(MAIN_SERVICE, `/api/distribution-lists/${encodeURIComponent(name)}`),
   update: (id: string, body: { name: string; description: string }) =>
-    request<DistributionList>(FASTAPI, `/api/distribution-lists/${id}`, {
+    request<DistributionList>(MAIN_SERVICE, `/api/distribution-lists/${id}`, {
       method: 'PUT',
       body: JSON.stringify(body),
     }),
   addRecipient: (listId: string, recipientId: string) =>
-    request<void>(FASTAPI, `/api/distribution-lists/${listId}/recipients`, {
+    request<void>(MAIN_SERVICE, `/api/distribution-lists/${listId}/recipients`, {
       method: 'POST',
       body: JSON.stringify({ recipient_id: recipientId }),
     }),
   removeRecipient: (listId: string, recipientId: string) =>
     request<void>(
-      FASTAPI,
+      MAIN_SERVICE,
       `/api/distribution-lists/${listId}/recipients/${recipientId}`,
       { method: 'DELETE' }
     ),
@@ -110,7 +110,7 @@ export const listsApi = {
 
 export const messagesApi = {
   craft: (body: CraftMessageRequest) =>
-    request<CraftMessageResponse>(FASTAPI, '/api/messages/craft', {
+    request<CraftMessageResponse>(MAIN_SERVICE, '/api/messages/craft', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
@@ -118,12 +118,12 @@ export const messagesApi = {
 
 export const outboxApi = {
   getPending: () =>
-    request<OutboxEntry[]>(FASTAPI, '/api/outbox/pending'),
+    request<OutboxEntry[]>(MAIN_SERVICE, '/api/outbox/pending'),
   getSent: (start: string, end: string) =>
-    request<OutboxEntry[]>(FASTAPI, `/api/outbox/sent?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`),
+    request<OutboxEntry[]>(MAIN_SERVICE, `/api/outbox/sent?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`),
   getByRecipient: (phone: string, status?: OutboxStatus) => {
     const params = new URLSearchParams({ phone })
     if (status) params.set('status', status)
-    return request<OutboxEntry[]>(FASTAPI, `/api/outbox/by-recipient?${params.toString()}`)
+    return request<OutboxEntry[]>(MAIN_SERVICE, `/api/outbox/by-recipient?${params.toString()}`)
   },
 }

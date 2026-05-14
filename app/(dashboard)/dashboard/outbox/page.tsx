@@ -153,7 +153,7 @@ export default function OutboxPage() {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ export default function OutboxPage() {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
               />
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function OutboxPage() {
                   setRecipientDropdownOpen(true)
                 }}
                 onFocus={() => setRecipientDropdownOpen(true)}
-                className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
               />
               {recipientDropdownOpen && filteredRecipients.length > 0 && (
                 <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
@@ -212,7 +212,7 @@ export default function OutboxPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as OutboxStatus | '')}
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
             >
               <option value="">Todos los estados</option>
               <option value="pending">Pendiente</option>
@@ -223,7 +223,7 @@ export default function OutboxPage() {
               onClick={fetchByRecipient}
               disabled={!selectedPhone}
               title="Buscar mensajes del destinatario"
-              className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className="rounded-md bg-brand-red px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-red/90 disabled:opacity-50"
             >
               Buscar
             </button>
