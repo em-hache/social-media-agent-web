@@ -2,7 +2,7 @@
 
 AGENTS.md
 CLAUDE.md
-/.idea/
+.idea/
 
 # dependencies
 /node_modules
