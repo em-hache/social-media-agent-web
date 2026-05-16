@@ -32,28 +32,28 @@ export const whatsappApi = {
 
 export const usersApi = {
   getAll: () =>
-    request<User[]>(MAIN_SERVICE, '/users/all'),
+    request<User[]>(MAIN_SERVICE, '/api/users/all'),
   create: (body: Omit<User, 'id' | 'created_at'>) =>
-    request<User>(MAIN_SERVICE, '/users/create', {
+    request<User>(MAIN_SERVICE, '/api/users/create', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
   createFromRecipient: (body: { recipient_id: string; alias: string; email: string; roles?: string[] }) =>
-    request<User>(MAIN_SERVICE, '/users/from-recipient', {
+    request<User>(MAIN_SERVICE, '/api/users/from-recipient', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
   update: (id: string, body: Partial<User>) =>
-    request<User>(MAIN_SERVICE, `/users/${id}`, {
+    request<User>(MAIN_SERVICE, `/api/users/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(body),
     }),
   delete: (id: string) =>
-    request<void>(MAIN_SERVICE, `/users/${id}`, { method: 'DELETE' }),
+    request<void>(MAIN_SERVICE, `/api/users/${id}`, { method: 'DELETE' }),
   deactivate: (id: string) =>
-    request<User>(MAIN_SERVICE, `/users/${id}/deactivate`, { method: 'PUT' }),
+    request<User>(MAIN_SERVICE, `/api/users/${id}/deactivate`, { method: 'PUT' }),
   activate: (id: string) =>
-    request<User>(MAIN_SERVICE, `/users/${id}/activate`, { method: 'PUT' }),
+    request<User>(MAIN_SERVICE, `/api/users/${id}/activate`, { method: 'PUT' }),
 }
 
 export const recipientsApi = {
