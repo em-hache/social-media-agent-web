@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -18,36 +18,36 @@ export default function LoginPage() {
     setLoading(true)
     const res = await signIn('credentials', {
       redirect: false,
-      email,
+      username,
       password,
     })
     setLoading(false)
     if (res?.ok) {
       router.push('/dashboard/whatsapp')
     } else {
-      setError('Correo o contraseña incorrectos')
+      setError('Usuario o contraseña incorrectos')
     }
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-brand-cream">
-      <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8">
-        <div className="mb-4 flex justify-center">
-          <Image src="/logo.png" alt="CommAgent" width={120} height={120} priority />
+      <div className="w-full max-w-sm overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <div className="flex flex-col items-center bg-brand-cream px-8 pt-8 pb-6">
+          <Image src="/logo.png" alt="Comunicación con la Comunidad" width={160} height={160} priority />
+          <h1 className="mt-4 text-center text-xl font-semibold text-gray-900">
+            Comunicación con la Comunidad
+          </h1>
         </div>
-        <h1 className="mb-6 text-center text-xl font-semibold text-gray-900">
-          CommAgent Admin
-        </h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-8">
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
-              Correo electrónico
+            <label htmlFor="username" className="mb-1 block text-sm font-medium text-gray-700">
+              Usuario
             </label>
             <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
             />
