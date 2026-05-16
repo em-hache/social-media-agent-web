@@ -1,12 +1,17 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
 type WhatsAppState = 'unknown' | 'active' | 'inactive'
+
+const STORAGE_KEY = 'sidebar-width'
+const DEFAULT_WIDTH = 240
+const MIN_WIDTH = 180
+const MAX_WIDTH = 400
 
 const links = [
   { href: '/dashboard/users', label: 'Usuarios' },
@@ -19,6 +24,22 @@ const links = [
 export default function Sidebar() {
   const pathname = usePathname()
   const [waState, setWaState] = useState<WhatsAppState>('unknown')
+  const [width, setWidth] = useState(DEFAULT_WIDTH)
+  const isResizing = useRef(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const parsed = Number(stored)
+      if (parsed >= MIN_WIDTH && parsed <= MAX_WIDTH) {
+        setWidth(parsed)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, String(width))
+  }, [width])
 
   const pollWhatsApp = useCallback(async () => {
     try {
@@ -35,10 +56,100 @@ export default function Sidebar() {
     return () => clearInterval(interval)
   }, [pollWhatsApp])
 
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    isResizing.current = true
+
+    const startX = e.clientX
+    const startWidth = width
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing.current) return
+      const newWidth = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startWidth + (e.clientX - startX)))
+      setWidth(newWidth)
+    }
+
+    const handleMouseUp = () => {
+      isResizing.current = false
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+  }, [width])
+
   const waActive = pathname.startsWith('/dashboard/whatsapp')
 
-  return (
-    <aside className="flex w-60 flex-col border-r border-gray-200 bg-brand-cream">
+  // Mobile top navigation (below md breakpoint)
+  const mobileNav = (
+    <aside className="flex md:hidden flex-row items-center gap-2 border-b border-gray-200 bg-brand-cream px-3 py-2 overflow-x-auto">
+      <Image src="/logo.png" alt="CommAgent" width={32} height={32} className="h-8 w-8 flex-shrink-0" />
+      <nav className="flex flex-row items-center gap-1 flex-1 overflow-x-auto">
+        {links.map((link) => {
+          const active = pathname.startsWith(link.href)
+          if (link.disabled) {
+            return (
+              <span
+                key={link.href}
+                className="cursor-not-allowed whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium text-gray-400"
+              >
+                {link.label}
+              </span>
+            )
+          }
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium ${
+                active
+                  ? 'bg-brand-cream text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              {link.label}
+            </Link>
+          )
+        })}
+      </nav>
+      <Link
+        href="/dashboard/whatsapp"
+        className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium flex-shrink-0 ${
+          waActive
+            ? 'bg-brand-cream text-gray-900'
+            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+        }`}
+      >
+        WA
+        {waState !== 'unknown' && (
+          <span
+            className={`inline-block h-2 w-2 rounded-full ${
+              waState === 'active' ? 'bg-green-500' : 'bg-red-500'
+            }`}
+          />
+        )}
+      </Link>
+      <button
+        onClick={() => signOut({ callbackUrl: '/login' })}
+        title="Cerrar sesión"
+        className="flex-shrink-0 rounded-md px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+      >
+        Salir
+      </button>
+    </aside>
+  )
+
+  // Desktop sidebar (md and up)
+  const desktopSidebar = (
+    <aside
+      className="hidden md:flex flex-col border-r border-gray-200 bg-brand-cream relative"
+      style={{ width }}
+    >
       <div className="py-5">
         <Image src="/logo.png" alt="CommAgent" width={240} height={240} className="w-full" />
       </div>
@@ -98,6 +209,18 @@ export default function Sidebar() {
           Cerrar sesión
         </button>
       </div>
+      {/* Resize handle */}
+      <div
+        onMouseDown={handleMouseDown}
+        className="absolute top-0 right-0 h-full w-1 cursor-col-resize border-r border-transparent hover:border-gray-400 transition-colors"
+      />
     </aside>
+  )
+
+  return (
+    <>
+      {mobileNav}
+      {desktopSidebar}
+    </>
   )
 }
