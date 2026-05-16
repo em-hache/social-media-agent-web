@@ -88,7 +88,9 @@ export default function Sidebar() {
   // Mobile top navigation (below md breakpoint)
   const mobileNav = (
     <aside className="flex md:hidden flex-row items-center gap-2 border-b border-gray-200 bg-brand-cream px-3 py-2 overflow-x-auto">
-      <Image src="/logo.png" alt="CommAgent" width={32} height={32} className="h-8 w-8 flex-shrink-0" />
+      <Link href="/dashboard">
+        <Image src="/logo.png" alt="CommAgent" width={32} height={32} className="h-8 w-8 flex-shrink-0" />
+      </Link>
       <nav className="flex flex-row items-center gap-1 flex-1 overflow-x-auto">
         {links.map((link) => {
           const active = pathname.startsWith(link.href)
@@ -150,9 +152,9 @@ export default function Sidebar() {
       className="hidden md:flex flex-col border-r border-gray-200 bg-brand-cream relative"
       style={{ width }}
     >
-      <div className="py-5">
+      <Link href="/dashboard" className="block py-5">
         <Image src="/logo.png" alt="CommAgent" width={240} height={240} className="w-full" />
-      </div>
+      </Link>
       <nav className="flex flex-1 flex-col gap-1 px-2">
         {links.map((link) => {
           const active = pathname.startsWith(link.href)
