@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 import Topbar from '@/components/Topbar'
 import type { User, Recipient, DistributionListSummary, OutboxEntry } from '@/lib/types'
 
@@ -56,64 +58,62 @@ export default function DashboardPage() {
         {loading && <p className="text-sm text-gray-500">Cargando...</p>}
         {!loading && stats && (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
+            <Link href="/dashboard/outbox" className="rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-300 transition-colors">
               <p className="text-sm font-medium text-gray-500">Mensajes</p>
               <p className="mt-1 text-2xl font-semibold text-gray-900">{stats.sentLast7Days}</p>
               <p className="mt-1 text-xs text-gray-500">enviados (últimos 7 días)</p>
               <p className="mt-2 text-sm text-gray-600">{stats.pending} pendientes</p>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
+            </Link>
+            <Link href="/dashboard/users" className="rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-300 transition-colors">
               <p className="text-sm font-medium text-gray-500">Usuarios</p>
               <p className="mt-1 text-2xl font-semibold text-gray-900">{stats.totalUsers}</p>
               <p className="mt-1 text-xs text-gray-500">total</p>
               <p className="mt-2 text-sm text-gray-600">{stats.activeUsers} activos</p>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
+            </Link>
+            <Link href="/dashboard/recipients" className="rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-300 transition-colors">
               <p className="text-sm font-medium text-gray-500">Destinatarios</p>
               <p className="mt-1 text-2xl font-semibold text-gray-900">{stats.totalRecipients}</p>
               <p className="mt-1 text-xs text-gray-500">total</p>
               <p className="mt-2 text-sm text-gray-600">{stats.activeRecipients} activos</p>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
+            </Link>
+            <Link href="/dashboard/lists" className="rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-300 transition-colors">
               <p className="text-sm font-medium text-gray-500">Inscripciones</p>
               <p className="mt-1 text-2xl font-semibold text-gray-900">{stats.totalInscripciones}</p>
               <p className="mt-1 text-xs text-gray-500">en listas de distribución</p>
-            </div>
+            </Link>
           </div>
         )}
 
-        {/* Help section */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="mb-4 text-sm font-semibold text-gray-900">Guía rápida</h3>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div>
-              <h4 className="text-sm font-medium text-gray-900">1. Inscribir destinatarios</h4>
-              <ol className="mt-2 space-y-1 text-sm text-gray-600 list-decimal list-inside">
-                <li>Ve a la sección &quot;Destinatarios&quot;</li>
-                <li>Haz clic en &quot;+ Nuevo destinatario&quot;</li>
-                <li>Completa el nombre y número de teléfono</li>
-                <li>Guarda el destinatario</li>
-              </ol>
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-gray-900">2. Enviar mensajes</h4>
-              <ol className="mt-2 space-y-1 text-sm text-gray-600 list-decimal list-inside">
-                <li>Ve a &quot;Historial de mensajes&quot;</li>
-                <li>Selecciona una lista de distribución</li>
-                <li>Redacta o genera el mensaje</li>
-                <li>Revisa y confirma el envío</li>
-              </ol>
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-gray-900">3. Asignar a listas de distribución</h4>
-              <ol className="mt-2 space-y-1 text-sm text-gray-600 list-decimal list-inside">
-                <li>Ve a &quot;Listas de distribución&quot;</li>
-                <li>Selecciona o crea una lista</li>
-                <li>Agrega destinatarios a la lista</li>
-                <li>Los mensajes se enviarán a todos los miembros</li>
-              </ol>
-            </div>
-          </div>
+        {/* Help grid */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <Link href="/dashboard/help/enroll" className="rounded-lg border border-gray-200 bg-white p-6 hover:border-gray-300 transition-colors">
+            <h3 className="mb-4 text-sm font-semibold text-gray-900">Cómo suscribirse</h3>
+            <Image
+              src="/enroll_mini.jpg"
+              alt="Tutorial de inscripción"
+              width={400}
+              height={300}
+              className="w-full rounded-md"
+            />
+          </Link>
+          <Link href="/dashboard/help/assign-dl" className="rounded-lg border border-gray-200 bg-white p-6 hover:border-gray-300 transition-colors">
+            <h3 className="mb-4 text-sm font-semibold text-gray-900">Asignar a listas de distribución</h3>
+            <ol className="space-y-1 text-sm text-gray-600 list-decimal list-inside">
+              <li>Ve a &quot;Listas de distribución&quot;</li>
+              <li>Selecciona o crea una lista</li>
+              <li>Agrega destinatarios a la lista</li>
+              <li>Los mensajes se enviarán a todos los miembros</li>
+            </ol>
+          </Link>
+          <Link href="/dashboard/help/create-user" className="rounded-lg border border-gray-200 bg-white p-6 hover:border-gray-300 transition-colors">
+            <h3 className="mb-4 text-sm font-semibold text-gray-900">Crear usuario</h3>
+            <ol className="space-y-1 text-sm text-gray-600 list-decimal list-inside">
+              <li>Ve a la sección &quot;Usuarios&quot;</li>
+              <li>Haz clic en &quot;+ Nuevo usuario&quot;</li>
+              <li>Selecciona un destinatario existente</li>
+              <li>Asigna alias, correo y roles</li>
+            </ol>
+          </Link>
         </div>
       </div>
     </>
