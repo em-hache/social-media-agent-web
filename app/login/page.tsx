@@ -23,7 +23,7 @@ export default function LoginPage() {
     })
     setLoading(false)
     if (res?.ok) {
-      router.push('/dashboard/whatsapp')
+      router.push('/dashboard')
     } else {
       setError('Usuario o contraseña incorrectos')
     }
