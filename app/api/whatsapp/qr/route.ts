@@ -1,16 +1,18 @@
-import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { requireAuth } from '@/lib/auth-helpers'
 
 const NODE_API = process.env.WHATSAPP_GW_URL!
 
-export async function GET() {
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+export async function GET(request: NextRequest) {
+  const { jwt, error } = await requireAuth(request)
+  if (error) return error
+
   try {
-    const res = await fetch(`${NODE_API}/qr`)
+    const res = await fetch(`${NODE_API}/qr`, {
+      headers: {
+        'Authorization': `Bearer ${jwt}`,
+      },
+    })
     if (res.status === 204) {
       return new NextResponse(null, { status: 204 })
     }

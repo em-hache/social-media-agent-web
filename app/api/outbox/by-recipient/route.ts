@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth-helpers'
 import { outboxApi } from '@/lib/api-client'
 import type { OutboxStatus } from '@/lib/types'
 
 export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const { jwt, error } = await requireAuth(request)
+  if (error) return error
+
   try {
     const { searchParams } = new URL(request.url)
     const phone = searchParams.get('phone')
@@ -16,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'phone is required' }, { status: 400 })
     }
     const status = searchParams.get('status') as OutboxStatus | null
-    const data = await outboxApi.getByRecipient(phone, status ?? undefined)
+    const data = await outboxApi.getByRecipient(phone, status ?? undefined, jwt)
     return NextResponse.json(data)
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : 'Backend error'
